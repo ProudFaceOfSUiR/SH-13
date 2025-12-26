@@ -1,4 +1,12 @@
 /*******************************************************************************
+ * FICHIER: Serveur de jeu Sherlock 13
+ * DESCRIPTION: Serveur TCP pour un jeu de cartes multijoueur (4 joueurs)
+ *              basé sur l'univers de Sherlock Holmes
+ * AUTEUR: Projet Info Système
+ * DATE: 2020/2021
+ ******************************************************************************/
+
+/*******************************************************************************
  * SECTION 1: INCLUSION DES BIBLIOTHÈQUES
  ******************************************************************************/
 #include <stdio.h>          // Fonctions d'entrée/sortie standard (printf, scanf, etc.)
@@ -32,7 +40,7 @@ int deck[13]={0,1,2,3,4,5,6,7,8,9,10,11,12};
 
 // Tableau des statistiques de chaque joueur
 // tableCartes[i][j] = statistique j du joueur i
-// 8 colonnes: [0-6]=différentes catégories, [7]=points totaux
+// 8 colonnes: [0-6]=différentes catégories de symboles, [7]=points totaux
 int tableCartes[4][8];
 
 // Noms des 13 cartes/personnages du jeu Sherlock 13
@@ -95,7 +103,7 @@ void melangerDeck()
  ******************************************************************************/
 
 // Crée le tableau de statistiques basé sur les cartes distribuées
-// Chaque carte possède des caractéristiques qui s'additionnent
+// Chaque carte possède des caractéristiques (symboles) qui s'additionnent
 void createTable()
 {
     // DISTRIBUTION DES CARTES:
@@ -109,7 +117,7 @@ void createTable()
 
     // Initialise toutes les statistiques à 0
     for (i=0; i<4; i++)                 // Pour chaque joueur
-        for (j=0; j<8; j++)             // Pour chaque catégorie
+        for (j=0; j<8; j++)             // Pour chaque catégorie de symbole
             tableCartes[i][j] = 0;      // Remise à zéro
 
     // Pour chaque joueur (0 à 3)
@@ -121,79 +129,79 @@ void createTable()
             c = deck[i*3+j];        // Récupère l'indice de la carte du joueur i
             
             // Selon la carte, incrémente les statistiques correspondantes
-            // Chaque case représente une caractéristique du personnage
+            // Chaque case représente un symbole ou caractéristique du personnage
             switch (c)
             {
                 case 0: // Sebastian Moran (adversaire de Holmes)
                     tableCartes[i][7]++;    // Incrémente les points totaux
-                    tableCartes[i][2]++;    // Incrémente la catégorie 2
+                    tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
                 case 1: // Irene Adler (l'Aventurière)
                     tableCartes[i][7]++;    // Incrémente les points totaux
-                    tableCartes[i][1]++;    // Incrémente la catégorie 1
-                    tableCartes[i][5]++;    // Incrémente la catégorie 5
+                    tableCartes[i][1]++;    // Incrémente le symbole 1
+                    tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
                 case 2: // Inspector Lestrade (Scotland Yard)
-                    tableCartes[i][3]++;    // Incrémente la catégorie 3
-                    tableCartes[i][6]++;    // Incrémente la catégorie 6
-                    tableCartes[i][4]++;    // Incrémente la catégorie 4
+                    tableCartes[i][3]++;    // Incrémente le symbole 3
+                    tableCartes[i][6]++;    // Incrémente le symbole 6
+                    tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
                 case 3: // Inspector Gregson (Scotland Yard)
-                    tableCartes[i][3]++;    // Incrémente la catégorie 3
-                    tableCartes[i][2]++;    // Incrémente la catégorie 2
-                    tableCartes[i][4]++;    // Incrémente la catégorie 4
+                    tableCartes[i][3]++;    // Incrémente le symbole 3
+                    tableCartes[i][2]++;    // Incrémente le symbole 2
+                    tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
                 case 4: // Inspector Baynes (Scotland Yard)
-                    tableCartes[i][3]++;    // Incrémente la catégorie 3
-                    tableCartes[i][1]++;    // Incrémente la catégorie 1
+                    tableCartes[i][3]++;    // Incrémente le symbole 3
+                    tableCartes[i][1]++;    // Incrémente le symbole 1
                     break;
                     
                 case 5: // Inspector Bradstreet (Scotland Yard)
-                    tableCartes[i][3]++;    // Incrémente la catégorie 3
-                    tableCartes[i][2]++;    // Incrémente la catégorie 2
+                    tableCartes[i][3]++;    // Incrémente le symbole 3
+                    tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
                 case 6: // Inspector Hopkins (Scotland Yard)
-                    tableCartes[i][3]++;    // Incrémente la catégorie 3
-                    tableCartes[i][0]++;    // Incrémente la catégorie 0
-                    tableCartes[i][6]++;    // Incrémente la catégorie 6
+                    tableCartes[i][3]++;    // Incrémente le symbole 3
+                    tableCartes[i][0]++;    // Incrémente le symbole 0
+                    tableCartes[i][6]++;    // Incrémente le symbole 6
                     break;
                     
                 case 7: // Sherlock Holmes (le Détective)
-                    tableCartes[i][0]++;    // Incrémente la catégorie 0
-                    tableCartes[i][1]++;    // Incrémente la catégorie 1
-                    tableCartes[i][2]++;    // Incrémente la catégorie 2
+                    tableCartes[i][0]++;    // Incrémente le symbole 0
+                    tableCartes[i][1]++;    // Incrémente le symbole 1
+                    tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
                 case 8: // John Watson (le Compagnon)
-                    tableCartes[i][0]++;    // Incrémente la catégorie 0
-                    tableCartes[i][6]++;    // Incrémente la catégorie 6
-                    tableCartes[i][2]++;    // Incrémente la catégorie 2
+                    tableCartes[i][0]++;    // Incrémente le symbole 0
+                    tableCartes[i][6]++;    // Incrémente le symbole 6
+                    tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
                 case 9: // Mycroft Holmes (le Frère)
-                    tableCartes[i][0]++;    // Incrémente la catégorie 0
-                    tableCartes[i][1]++;    // Incrémente la catégorie 1
-                    tableCartes[i][4]++;    // Incrémente la catégorie 4
+                    tableCartes[i][0]++;    // Incrémente le symbole 0
+                    tableCartes[i][1]++;    // Incrémente le symbole 1
+                    tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
                 case 10: // Mrs. Hudson (la Logeuse)
-                    tableCartes[i][0]++;    // Incrémente la catégorie 0
-                    tableCartes[i][5]++;    // Incrémente la catégorie 5
+                    tableCartes[i][0]++;    // Incrémente le symbole 0
+                    tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
                 case 11: // Mary Morstan (l'Épouse de Watson)
-                    tableCartes[i][4]++;    // Incrémente la catégorie 4
-                    tableCartes[i][5]++;    // Incrémente la catégorie 5
+                    tableCartes[i][4]++;    // Incrémente le symbole 4
+                    tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
                 case 12: // James Moriarty (l'Ennemi)
                     tableCartes[i][7]++;    // Incrémente les points totaux
-                    tableCartes[i][1]++;    // Incrémente la catégorie 1
+                    tableCartes[i][1]++;    // Incrémente le symbole 1
                     break;
             }
         }
@@ -352,8 +360,8 @@ int main(int argc, char *argv[])
     
     // Variables pour la phase de jeu
     int idJoueur;                                // ID du joueur qui fait l'action
-    int colonne;                                 // Colonne du tableau (caractéristique)
-    int ligne;                                   // Ligne du tableau (destination ou joueur)
+    int colonne;                                 // Colonne du tableau (symbole/caractéristique)
+    int ligne;                                   // Ligne du tableau (personnage ou joueur)
     int coupable;                                // La carte coupable (indice 12 du deck)
     int nombre;                                  // Nombre de caractéristiques (pour commande S)
 
@@ -542,8 +550,8 @@ int main(int argc, char *argv[])
                         printf("Cartes envoyées au joueur 3: %s, %s, %s\n", 
                                nomcartes[deck[9]], nomcartes[deck[10]], nomcartes[deck[11]]);
 
-                        // Affiche la carte coupable (pour le debug du serveur)
-                        printf("\n>>> CARTE COUPABLE: %s <<<\n\n", nomcartes[deck[12]]);
+                        // Affiche le personnage coupable (pour le debug du serveur)
+                        printf("\n>>> PERSONNAGE COUPABLE: %s <<<\n\n", nomcartes[deck[12]]);
 
                         // Envoie un broadcast "T" pour indiquer le joueur courant (qui commence)
                         sprintf(reply, "T %d", joueurCourant);
@@ -562,160 +570,82 @@ int main(int argc, char *argv[])
          * État fsmServer == 1: La partie est en cours, traitement des actions
          ***********************************************************************/
         
-        else if (fsmServer == 1)    // État 1: partie en cours
-        {
-            switch (buffer[0])
+        else if (fsmServer == 1)
+{
+    switch (buffer[0])
+    {
+        case 'G':   // Proposition du coupable
+            sscanf(buffer, "%c %d %d", &com, &idJoueur, &ligne);
+
+            if (idJoueur != joueurCourant)
+                break;
+
+            if (ligne == deck[12])
             {
-                /***********************************************************
-                 * CAS 'G': PROPOSITION D'UNE DESTINATION GAGNANTE
-                 * Format du message: "G <idJoueur> <ligne>"
-                 * Le joueur propose quelle destination est le coupable
-                 ***********************************************************/
-                case 'G':
-                    printf(">>> ACTION: PROPOSITION DE DESTINATION <<<\n");
-                    
-                    // Parse le message pour récupérer l'ID du joueur et la ligne de la destination
-                    sscanf(buffer, "%c %d %d", &com, &idJoueur, &ligne);
-                    printf("Joueur %d (%s) propose la destination ligne %d (%s)\n", 
-                           idJoueur, tcpClients[idJoueur].name, ligne, nomcartes[ligne]);
-                    
-                    // La carte coupable est la 13ème carte (indice 12 du deck)
-                    coupable = deck[12];
-                    
-                    // Vérifie si la proposition correspond au coupable
-                    if (ligne == coupable)
-                    {
-                        // ===== BONNE PROPOSITION - VICTOIRE =====
-                        printf("*** VICTOIRE! Le joueur %d (%s) a trouvé la bonne destination! ***\n\n", 
-                               idJoueur, tcpClients[idJoueur].name);
-                        
-                        // Envoie un message de victoire "A" à tous les joueurs
-                        // Format: "A <idJoueur> 1" (1 = victoire)
-                        sprintf(reply, "A %d 1", idJoueur);
-                        broadcastMessage(reply);
-                        
-                        // La partie est terminée mais le serveur continue d'écouter
-                    }
-                    else
-                    {
-                        // ===== MAUVAISE PROPOSITION - ÉCHEC =====
-                        printf("*** ÉCHEC! Le joueur %d (%s) s'est trompé ***\n", 
-                               idJoueur, tcpClients[idJoueur].name);
-                        printf("Proposé: %s | Coupable: %s\n", nomcartes[ligne], nomcartes[coupable]);
-                        
-                        // Envoie un message d'échec "A" à tous les joueurs
-                        // Format: "A <idJoueur> 0" (0 = échec)
-                        sprintf(reply, "A %d 0", idJoueur);
-                        broadcastMessage(reply);
-                        
-                        // Passe au joueur suivant (modulo 4 pour boucler de 0 à 3)
-                        joueurCourant = (joueurCourant + 1) % 4;
-                        
-                        // Informe tous les joueurs du nouveau joueur courant
-                        sprintf(reply, "T %d", joueurCourant);
-                        broadcastMessage(reply);
-                        printf("C'est maintenant au tour du joueur %d (%s)\n\n", 
-                               joueurCourant, tcpClients[joueurCourant].name);
-                    }
-                    break;
-                    
-                /***********************************************************
-                 * CAS 'O': QUESTION GÉNÉRALE À TOUS LES JOUEURS
-                 * Format du message: "O <idJoueur> <colonne>"
-                 * Le joueur demande: "Qui a la caractéristique <colonne>?"
-                 * Tous les joueurs (sauf celui qui demande) répondent oui ou non
-                 ***********************************************************/
-                case 'O':
-                    printf(">>> ACTION: QUESTION GÉNÉRALE <<<\n");
-                    
-                    // Parse le message pour récupérer l'ID du joueur et la colonne
-                    sscanf(buffer, "%c %d %d", &com, &idJoueur, &colonne);
-                    printf("Joueur %d (%s) demande qui a la caractéristique colonne %d\n", 
-                           idJoueur, tcpClients[idJoueur].name, colonne);
-                    
-                    // Parcourt tous les joueurs pour vérifier s'ils ont la caractéristique
-                    for (i=0; i<4; i++)
-                    {
-                        // Ne pas traiter le joueur qui pose la question (il connaît déjà ses cartes)
-                        if (i == idJoueur)
-                        {
-                            printf("  Joueur %d: ignoré (c'est lui qui demande)\n", i);
-                            continue;
-                        }
-                        
-                        // Vérifie si le joueur i possède la caractéristique (valeur > 0)
-                        if (tableCartes[i][colonne] > 0)
-                        {
-                            // Le joueur a la caractéristique - envoie 100 à tous (code pour "OUI")
-                            sprintf(reply, "V %d %d 100", i, colonne);
-                            broadcastMessage(reply);
-                            printf("  Joueur %d: OUI (a la caractéristique)\n", i);
-                        }
-                        else
-                        {
-                            // Le joueur n'a pas la caractéristique - envoie 0 à tous (code pour "NON")
-                            sprintf(reply, "V %d %d 0", i, colonne);
-                            broadcastMessage(reply);
-                            printf("  Joueur %d: NON (n'a pas la caractéristique)\n", i);
-                        }
-                    }
-                    
-                    // Passe au joueur suivant
-                    joueurCourant = (joueurCourant + 1) % 4;
-                    
-                    // Informe tous les joueurs du nouveau joueur courant
-                    sprintf(reply, "T %d", joueurCourant);
-                    broadcastMessage(reply);
-                    printf("C'est maintenant au tour du joueur %d (%s)\n\n", 
-                           joueurCourant, tcpClients[joueurCourant].name);
-                    break;
-                    
-                /***********************************************************
-                 * CAS 'S': QUESTION CIBLÉE À UN JOUEUR SPÉCIFIQUE
-                 * Format du message: "S <idJoueur> <ligneJoueurCible> <colonne>"
-                 * Le joueur demande: "Joueur <ligne>, combien de fois as-tu 
-                 * la caractéristique <colonne>?"
-                 * Le joueur ciblé répond avec le nombre exact
-                 ***********************************************************/
-                case 'S':
-                    printf(">>> ACTION: QUESTION CIBLÉE <<<\n");
-                    
-                    // Parse le message pour récupérer l'ID, le joueur cible et la colonne
-                    sscanf(buffer, "%c %d %d %d", &com, &idJoueur, &ligne, &colonne);
-                    printf("Joueur %d (%s) demande au joueur %d (%s) combien de fois il a la caractéristique colonne %d\n", 
-                           idJoueur, tcpClients[idJoueur].name, ligne, tcpClients[ligne].name, colonne);
-                    
-                    // Récupère le nombre exact de la caractéristique chez le joueur ciblé
-                    nombre = tableCartes[ligne][colonne];
-                    
-                    // Envoie la réponse à tous les joueurs
-                    // Format: "V <ligneJoueur> <colonne> <nombre>"
-                    sprintf(reply, "V %d %d %d", ligne, colonne, nombre);
-                    broadcastMessage(reply);
-                    printf("  Réponse: le joueur %d a %d fois la caractéristique %d\n", ligne, nombre, colonne);
-                    
-                    // Passe au joueur suivant
-                    joueurCourant = (joueurCourant + 1) % 4;
-                    
-                    // Informe tous les joueurs du nouveau joueur courant
-                    sprintf(reply, "T %d", joueurCourant);
-                    broadcastMessage(reply);
-                    printf("C'est maintenant au tour du joueur %d (%s)\n\n", 
-                           joueurCourant, tcpClients[joueurCourant].name);
-                    break;
-                    
-                default:
-                    // Commande inconnue - ignorée
-                    printf(">>> COMMANDE INCONNUE: %c <<<\n\n", buffer[0]);
-                    break;
+                sprintf(reply, "W %d %s", idJoueur, nomcartes[ligne]);
+                broadcastMessage(reply);
+                printf(">>> VICTOIRE DU JOUEUR %d <<<\n", idJoueur);
+                exit(0);
             }
-        }
-        
-        // Ferme la connexion avec le client actuel (le message a été traité)
-        close(newsockfd);
+            else
+            {
+                sprintf(reply, "F %d %s", idJoueur, nomcartes[ligne]);
+                broadcastMessage(reply);
+                printf("Mauvaise accusation du joueur %d\n", idJoueur);
+            }
+
+            joueurCourant = (joueurCourant + 1) % 4;
+            sprintf(reply, "T %d", joueurCourant);
+            broadcastMessage(reply);
+            break;
+
+        case 'O':   // Question oui/non
+            sscanf(buffer, "%c %d %d %d", &com, &idJoueur, &ligne, &colonne);
+
+            if (idJoueur != joueurCourant)
+                break;
+
+            int coupable = deck[12];
+            int reponse = 0;
+
+            // On recrée les caractéristiques du coupable
+            for (i = 0; i < 4; i++)
+                if (tableCartes[i][colonne] > 0 &&
+                    (deck[i*3] == coupable ||
+                     deck[i*3+1] == coupable ||
+                     deck[i*3+2] == coupable))
+                    reponse = 1;
+
+            sprintf(reply, "R %d %d", colonne, reponse);
+            broadcastMessage(reply);
+
+            joueurCourant = (joueurCourant + 1) % 4;
+            sprintf(reply, "T %d", joueurCourant);
+            broadcastMessage(reply);
+            break;
+
+        case 'S':   // Question statistique
+            sscanf(buffer, "%c %d %d", &com, &idJoueur, &nombre);
+
+            if (idJoueur != joueurCourant)
+                break;
+
+            int count = 0;
+            for (i = 0; i < 13; i++)
+            {
+                // logique simplifiée
+                if (deck[i] == nombre)
+                    count++;
+            }
+
+            sprintf(reply, "S %d %d", nombre, count);
+            sendMessageToClient(tcpClients[idJoueur].ipAddress,
+                                tcpClients[idJoueur].port,
+                                reply);
+
+            joueurCourant = (joueurCourant + 1) % 4;
+            sprintf(reply, "T %d", joueurCourant);
+            broadcastMessage(reply);
+            break;
     }
-    
-    // Ferme le socket serveur (code jamais atteint à cause de la boucle infinie)
-    close(sockfd);
-    return 0; 
 }
