@@ -1,12 +1,4 @@
 /*******************************************************************************
- * FICHIER: Serveur de jeu Sherlock 13
- * DESCRIPTION: Serveur TCP pour un jeu de cartes multijoueur (4 joueurs)
- *              basé sur l'univers de Sherlock Holmes
- * AUTEUR: Projet Info Système
- * DATE: 2020/2021
- ******************************************************************************/
-
-/*******************************************************************************
  * SECTION 1: INCLUSION DES BIBLIOTHÈQUES
  ******************************************************************************/
 #include <stdio.h>          // Fonctions d'entrée/sortie standard (printf, scanf, etc.)
@@ -132,74 +124,74 @@ void createTable()
             // Chaque case représente un symbole ou caractéristique du personnage
             switch (c)
             {
-                case 0: // Sebastian Moran (adversaire de Holmes)
+                case 0: // Sebastian Moran 
                     tableCartes[i][7]++;    // Incrémente les points totaux
                     tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
-                case 1: // Irene Adler (l'Aventurière)
+                case 1: // Irene Adler
                     tableCartes[i][7]++;    // Incrémente les points totaux
                     tableCartes[i][1]++;    // Incrémente le symbole 1
                     tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
-                case 2: // Inspector Lestrade (Scotland Yard)
+                case 2: // Inspector Lestrade
                     tableCartes[i][3]++;    // Incrémente le symbole 3
                     tableCartes[i][6]++;    // Incrémente le symbole 6
                     tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
-                case 3: // Inspector Gregson (Scotland Yard)
+                case 3: // Inspector Gregson 
                     tableCartes[i][3]++;    // Incrémente le symbole 3
                     tableCartes[i][2]++;    // Incrémente le symbole 2
                     tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
-                case 4: // Inspector Baynes (Scotland Yard)
+                case 4: // Inspector Baynes 
                     tableCartes[i][3]++;    // Incrémente le symbole 3
                     tableCartes[i][1]++;    // Incrémente le symbole 1
                     break;
                     
-                case 5: // Inspector Bradstreet (Scotland Yard)
+                case 5: // Inspector Bradstreet 
                     tableCartes[i][3]++;    // Incrémente le symbole 3
                     tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
-                case 6: // Inspector Hopkins (Scotland Yard)
+                case 6: // Inspector Hopkins 
                     tableCartes[i][3]++;    // Incrémente le symbole 3
                     tableCartes[i][0]++;    // Incrémente le symbole 0
                     tableCartes[i][6]++;    // Incrémente le symbole 6
                     break;
                     
-                case 7: // Sherlock Holmes (le Détective)
+                case 7: // Sherlock Holmes 
                     tableCartes[i][0]++;    // Incrémente le symbole 0
                     tableCartes[i][1]++;    // Incrémente le symbole 1
                     tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
-                case 8: // John Watson (le Compagnon)
+                case 8: // John Watson 
                     tableCartes[i][0]++;    // Incrémente le symbole 0
                     tableCartes[i][6]++;    // Incrémente le symbole 6
                     tableCartes[i][2]++;    // Incrémente le symbole 2
                     break;
                     
-                case 9: // Mycroft Holmes (le Frère)
+                case 9: // Mycroft Holmes 
                     tableCartes[i][0]++;    // Incrémente le symbole 0
                     tableCartes[i][1]++;    // Incrémente le symbole 1
                     tableCartes[i][4]++;    // Incrémente le symbole 4
                     break;
                     
-                case 10: // Mrs. Hudson (la Logeuse)
+                case 10: // Mrs. Hudson 
                     tableCartes[i][0]++;    // Incrémente le symbole 0
                     tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
-                case 11: // Mary Morstan (l'Épouse de Watson)
+                case 11: // Mary Morstan 
                     tableCartes[i][4]++;    // Incrémente le symbole 4
                     tableCartes[i][5]++;    // Incrémente le symbole 5
                     break;
                     
-                case 12: // James Moriarty (l'Ennemi)
+                case 12: // James Moriarty 
                     tableCartes[i][7]++;    // Incrémente les points totaux
                     tableCartes[i][1]++;    // Incrémente le symbole 1
                     break;
@@ -209,7 +201,7 @@ void createTable()
 }
 
 /*******************************************************************************
- * SECTION 6: FONCTIONS D'AFFICHAGE (DEBUG)
+ * SECTION 6: FONCTIONS D'AFFICHAGE (POUR LE DEBUG)
  ******************************************************************************/
 
 // Affiche le deck et le tableau de statistiques dans le terminal du serveur
@@ -245,7 +237,7 @@ void printClients()
     for (i=0; i<nbClients; i++)
         printf("%d: %s %5.5d %s\n", i,              // Numéro du client
                tcpClients[i].ipAddress,              // Adresse IP
-               tcpClients[i].port,                   // Port (format 5 chiffres)
+               tcpClients[i].port,                   // Port 
                tcpClients[i].name);                  // Nom du joueur
     printf("\n");
 }
@@ -300,7 +292,7 @@ void sendMessageToClient(char *clientip, int clientport, char *mess)
          (char *)&serv_addr.sin_addr.s_addr,
          server->h_length);
     
-    serv_addr.sin_port = htons(clientport);              // Convertit le port en format réseau (big-endian)
+    serv_addr.sin_port = htons(clientport);              // Convertit le port en format réseau 
     
     // Établit la connexion avec le client
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
@@ -360,8 +352,7 @@ int main(int argc, char *argv[])
     
     // Variables pour la phase de jeu
     int idJoueur;                                // ID du joueur qui fait l'action
-    int colonne;                                 // Colonne du tableau (symbole/caractéristique)
-    int ligne;                                   // Ligne du tableau (personnage ou joueur)
+    int colonne;                                 // Colonne du tableau 
     int coupable;                                // La carte coupable (indice 12 du deck)
     int nombre;                                  // Nombre de caractéristiques (pour commande S)
 
@@ -455,7 +446,7 @@ int main(int argc, char *argv[])
         // Affiche les informations de la connexion pour le débogage
         printf("Received packet from %s:%d\nData: [%s]\n\n",
                inet_ntoa(cli_addr.sin_addr),            // Convertit l'IP en chaîne de caractères
-               ntohs(cli_addr.sin_port),                // Convertit le port en format hôte (little-endian)
+               ntohs(cli_addr.sin_port),                // Convertit le port en format hôte 
                buffer);
 
         /***********************************************************************
@@ -624,7 +615,7 @@ int main(int argc, char *argv[])
             broadcastMessage(reply);
             break;
 
-        case 'S':   // Question statistique
+        case 'S':   // Question statistique(Combien de cartes possèdent cette caractéristique ?)
             sscanf(buffer, "%c %d %d", &com, &idJoueur, &nombre);
 
             if (idJoueur != joueurCourant)
