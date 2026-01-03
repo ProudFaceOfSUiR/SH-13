@@ -1,9 +1,3 @@
-/*******************************************************************************
- * SERVEUR SHERLOCK 13 - VERSION SYNCHRONISÉE AVEC LE CLIENT
- * 
- * Ce serveur gère une partie du jeu Sherlock 13 pour 4 joueurs en réseau.
- * Il distribue les cartes, gère les tours de jeu et traite les actions des joueurs.
- ******************************************************************************/
 
 /*******************************************************************************
  * SECTION 1: INCLUSION DES BIBLIOTHÈQUES
@@ -25,7 +19,7 @@
 // Structure représentant un client connecté au serveur
 struct _client
 {
-    char ipAddress[40];     // Adresse IP du client (ex: "192.168.1.1")
+    char ipAddress[40];     // Adresse IP du client 
     int port;               // Port d'écoute du client
     char name[40];          // Nom du joueur
 } tcpClients[4];            // Tableau de 4 clients (4 joueurs maximum)
@@ -261,7 +255,7 @@ int findClientByName(char *name)
 
     // Parcourt tous les clients connectés
     for (i=0; i<nbClients; i++)
-        if (strcmp(tcpClients[i].name, name) == 0)  // Compare les noms (sensible à la casse)
+        if (strcmp(tcpClients[i].name, name) == 0)  // Compare les noms 
             return i;                                 // Client trouvé, retourne son indice
     
     return -1;                                       // Client non trouvé
@@ -388,7 +382,7 @@ int main(int argc, char *argv[])
     portno = atoi(argv[1]);                              // Convertit l'argument en entier (numéro de port)
     serv_addr.sin_family = AF_INET;                      // Famille IPv4
     serv_addr.sin_addr.s_addr = INADDR_ANY;             // Accepte les connexions de n'importe quelle interface réseau
-    serv_addr.sin_port = htons(portno);                  // Convertit le port en format réseau (big-endian)
+    serv_addr.sin_port = htons(portno);                  // Convertit le port en format réseau 
     
     // Lie le socket à l'adresse et au port spécifiés
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) 
