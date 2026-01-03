@@ -563,7 +563,7 @@ int main(int argc, char *argv[])
                     break;
             }
         }
-        
+    
         /***********************************************************************
  * SOUS-SECTION 9.7: MACHINE À ÉTATS - PHASE DE JEU
  * État fsmServer == 1: La partie est en cours, traitement des actions
@@ -668,4 +668,6 @@ else if (fsmServer == 1)
             broadcastMessage(reply);
             break;
     }
+}
+}
 }
