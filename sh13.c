@@ -32,6 +32,8 @@ int b[3];
 int goEnabled;
 int connectEnabled;
 
+int gameOver = 0;           // 1 si la partie est terminée
+int winner = 0;             // 1 si ce joueur a gagné, 0 sinon
 
 char *nbobjets[]={"5","5","5","5","4","3","3","3"};
 char *nbnoms[]={"Sebastian Moran", "irene Adler", "inspector Lestrade",
@@ -159,6 +161,8 @@ int main(int argc, char ** argv)
 
     SDL_Surface *deck[13],*objet[8],*gobutton,*connectbutton;
 
+	SDL_Surface *winner_image, *loser_image;
+
 	deck[0] = IMG_Load("SH13_0.png");
 	deck[1] = IMG_Load("SH13_1.png");
 	deck[2] = IMG_Load("SH13_2.png");
@@ -185,6 +189,8 @@ int main(int argc, char ** argv)
 	gobutton = IMG_Load("gobutton.png");
 	connectbutton = IMG_Load("connectbutton.png");
 
+	winner_image = IMG_Load("winner_image.png");
+	loser_image = IMG_Load("loser_image.png");
 	strcpy(gNames[0],"-");
 	strcpy(gNames[1],"-");
 	strcpy(gNames[2],"-");
@@ -368,6 +374,38 @@ int main(int argc, char ** argv)
                     // RAJOUTER DU CODE ICI
                 }
                 break;
+
+			case 'W':
+                {
+                    int idWinner;
+                    char coupableName[256];
+                    sscanf(gbuffer,"W %d %s",&idWinner, coupableName);
+                    printf(">>> VICTOIRE du joueur %d (%s) - Coupable: %s <<<\n", 
+                           idWinner, gNames[idWinner], coupableName);
+                    
+                    gameOver = 1;
+                    if (idWinner == gId) {
+                        winner = 1;  // Ce joueur a gagné
+                        printf("VOUS AVEZ GAGNÉ!\n");
+                    } else {
+                        winner = 0;  // Ce joueur a perdu
+                        printf("Vous avez perdu...\n");
+                    }
+                }
+                break;
+                
+            case 'F':
+                {
+                    int idLoser;
+                    char accusedName[256];
+                    sscanf(gbuffer,"F %d %s",&idLoser, accusedName);
+                    printf(">>> ÉCHEC du joueur %d (%s) - A accusé: %s <<<\n", 
+                           idLoser, gNames[idLoser], accusedName);
+                }
+                break;
+		}
+		synchro=0;
+        }
 		}
 		synchro=0;
         }
@@ -380,6 +418,15 @@ int main(int argc, char ** argv)
 	SDL_Rect rect = {0, 0, 1024, 768}; 
 	SDL_RenderFillRect(renderer, &rect);
 
+	if (gameOver) {
+        if (winner && texture_winner != NULL) {
+            SDL_Rect dstrect = { 256, 184, 512, 400 };
+            SDL_RenderCopy(renderer, texture_winner, NULL, &dstrect);
+        } else if (!winner && texture_loser != NULL) {
+            SDL_Rect dstrect = { 256, 184, 512, 400 };
+            SDL_RenderCopy(renderer, texture_loser, NULL, &dstrect);
+        }
+    }
 	if (joueurSel!=-1)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 180, 180, 255);
