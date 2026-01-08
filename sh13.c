@@ -258,13 +258,19 @@ int main(int argc, char ** argv)
 				else if ((mx>=0) && (mx<200) && (my>=90) && (my<330))
 				{
                     printf("Case 1\n");
-					joueurSel=(my-90)/60;
+                    if (joueurSel==((my-90)/60))
+                        joueurSel=-1;
+                    else
+					    joueurSel=(my-90)/60;
 					guiltSel=-1;
 				}
 				else if ((mx>=200) && (mx<680) && (my>=0) && (my<90))
 				{
                     printf("Case 2\n"); // top row with objects
-					objetSel=(mx-200)/60;
+                    if (objetSel == ((mx-200)/60))
+                        objetSel=-1;
+                    else
+					    objetSel=(mx-200)/60;
 					guiltSel=-1;
 				}
 				else if ((mx>=100) && (mx<250) && (my>=350) && (my<740))
@@ -368,12 +374,44 @@ int main(int argc, char ** argv)
 				break;
             case 'R':
                 {
-                    int o,r;
-                    sscanf(gbuffer,"R %d %d",&o,&r);
+                    int o,j,r;
+                    sscanf(gbuffer,"R %d %d %d",&o, &j,&r);
                     printf("Réponse à la question O/N: objet=%d réponse=%d\n",o,r);
+                    tableCartes[j][o]=r?100:-1;
                     // RAJOUTER DU CODE ICI
                 }
                 break;
+            case 'S':
+                {
+                    int j1,o,t;
+                    sscanf(gbuffer,"S %d %d",&j1,&t);
+                    printf("Réponse à la question Statistique: joueur=%d total=%d \n",j1,t);
+                    tableCartes[joueurSel][objetSel]=t;
+                    // RAJOUTER DU CODE ICI
+                }
+                break;
+            case 'F':
+                {
+                    int j1;
+                    int j2;
+                    sscanf(gbuffer,"F %d %d",&j1,&j2);
+                    printf("Mauvaise accusation du joueur %d pour %d\n",j1,j2);
+                    guiltGuess[j2]=1;
+                }
+                break;
+            case 'W':
+                {
+                    int j1;
+                    int j2;
+                    sscanf(gbuffer,"F %d %d",&j1,&j2);
+                    if (j1==gId)
+                        printf(">>> VICTOIRE !!! Vous aviez raison, le coupable est %d <<<\n",j2);
+                    else
+                        printf(">>> DEFAITE !!! Le joueur %d avait raison, le coupable est %d <<<\n",j1,j2);
+                    guiltGuess[j2]=1;
+                }
+                break;
+
 
 			case 'W':
                 {
@@ -676,11 +714,12 @@ int main(int argc, char ** argv)
 
 	// Afficher les suppositions
 	for (i=0;i<13;i++)
-		if (guiltGuess[i])
+		if (guiltGuess[i] == 1)
 		{
 			SDL_RenderDrawLine(renderer, 250,350+i*30,300,380+i*30);
 			SDL_RenderDrawLine(renderer, 250,380+i*30,300,350+i*30);
 		}
+
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderDrawLine(renderer, 0,30+60,680,30+60);
