@@ -384,6 +384,28 @@ int main(int argc, char ** argv)
                     // RAJOUTER DU CODE ICI
                 }
                 break;
+            case 'F':
+                {
+                    int j1;
+                    int j2;
+                    sscanf(gbuffer,"F %d %d",&j1,&j2);
+                    printf("Mauvaise accusation du joueur %d pour %d\n",j1,j2);
+                    guiltGuess[j2]=1;
+                }
+                break;
+            case 'W':
+                {
+                    int j1;
+                    int j2;
+                    sscanf(gbuffer,"F %d %d",&j1,&j2);
+                    if (j1==gId)
+                        printf(">>> VICTOIRE !!! Vous aviez raison, le coupable est %d <<<\n",j2);
+                    else
+                        printf(">>> DEFAITE !!! Le joueur %d avait raison, le coupable est %d <<<\n",j1,j2);
+                    guiltGuess[j2]=1;
+                }
+                break;
+
 		}
 		synchro=0;
         }
@@ -645,11 +667,12 @@ int main(int argc, char ** argv)
 
 	// Afficher les suppositions
 	for (i=0;i<13;i++)
-		if (guiltGuess[i])
+		if (guiltGuess[i] == 1)
 		{
 			SDL_RenderDrawLine(renderer, 250,350+i*30,300,380+i*30);
 			SDL_RenderDrawLine(renderer, 250,380+i*30,300,350+i*30);
 		}
+
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderDrawLine(renderer, 0,30+60,680,30+60);

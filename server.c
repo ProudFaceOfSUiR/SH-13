@@ -593,7 +593,7 @@ else if (fsmServer == 1)
             if (coupable == deck[12])
             {
                 // Victoire
-                sprintf(reply, "W %d %s", idJoueur, nomcartes[coupable]);
+                sprintf(reply, "W %d %d", idJoueur, coupable);
                 broadcastMessage(reply);
                 printf(">>> VICTOIRE DU JOUEUR %d <<<\n", idJoueur);
                 exit(0);
@@ -601,9 +601,13 @@ else if (fsmServer == 1)
             else
             {
                 // Mauvaise accusation
-                sprintf(reply, "F %d %s", idJoueur, nomcartes[coupable]);
-                broadcastMessage(reply);
-                printf("Mauvaise accusation du joueur %d\n", idJoueur);
+                for (j = 0; j < 4; j++){
+                    if (j != idJoueur){
+                        sprintf(reply, "F %d %d", idJoueur, coupable);
+                        broadcastMessage(reply);
+                        printf("Mauvaise accusation du joueur %d\n", idJoueur);
+                    }
+                }
             }
 
             // Passe au joueur suivant
