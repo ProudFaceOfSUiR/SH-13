@@ -55,6 +55,12 @@ char *nomcartes[]=
 };
 
 int joueurCourant;          // Indice du joueur dont c'est le tour (0 à 3)
+int joueursPerdu[4];
+
+int joueurPerdu(int id)
+{
+    return joueursPerdu[id];
+}
 
 /*******************************************************************************
  * SECTION 3: FONCTION DE GESTION D'ERREUR
@@ -601,6 +607,7 @@ else if (fsmServer == 1)
             else
             {
                 // Mauvaise accusation
+                joueursPerdu[idJoueur] = 1;
                 for (j = 0; j < 4; j++){
                     if (j != idJoueur){
                         sprintf(reply, "F %d %d", idJoueur, coupable);
@@ -665,12 +672,14 @@ else if (fsmServer == 1)
                                 tcpClients[idJoueur].port,
                                 reply);
 
-            // Joueur suivant
+        }
+        // Joueur suivant
+        joueurCourant = (joueurCourant + 1) % 4;
+        if (joueurPerdu(joueurCourant))
             joueurCourant = (joueurCourant + 1) % 4;
-            sprintf(reply, "M %d", joueurCourant);
-            broadcastMessage(reply);
-            break;
-    }
+        sprintf(reply, "M %d", joueurCourant);
+        broadcastMessage(reply);
+        /* break; */
 }
 }
 }
