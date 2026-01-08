@@ -251,22 +251,26 @@ int main(int argc, char ** argv)
 				}
 				else if ((mx>=0) && (mx<200) && (my>=90) && (my<330))
 				{
+                    printf("Case 1\n");
 					joueurSel=(my-90)/60;
 					guiltSel=-1;
 				}
 				else if ((mx>=200) && (mx<680) && (my>=0) && (my<90))
 				{
+                    printf("Case 2\n"); // top row with objects
 					objetSel=(mx-200)/60;
 					guiltSel=-1;
 				}
 				else if ((mx>=100) && (mx<250) && (my>=350) && (my<740))
 				{
+                    printf("Case 3\n");
 					joueurSel=-1;
 					objetSel=-1;
 					guiltSel=(my-350)/30;
 				}
 				else if ((mx>=250) && (mx<300) && (my>=350) && (my<740))
 				{
+                    printf("Case 4\n"); // vertical row on the left
 					int ind=(my-350)/30;
 					guiltGuess[ind]=1-guiltGuess[ind];
 				}
@@ -319,6 +323,7 @@ int main(int argc, char ** argv)
 			// Message 'I' : le joueur recoit son Id
 			case 'I':
                 sscanf(gbuffer,"I %d",&id);
+                gId=id;
 				// RAJOUTER DU CODE ICI
 
 				break;
@@ -355,6 +360,14 @@ int main(int argc, char ** argv)
                 }
 
 				break;
+            case 'R':
+                {
+                    int o,r;
+                    sscanf(gbuffer,"R %d %d",&o,&r);
+                    printf("Réponse à la question O/N: objet=%d réponse=%d\n",o,r);
+                    // RAJOUTER DU CODE ICI
+                }
+                break;
 		}
 		synchro=0;
         }
