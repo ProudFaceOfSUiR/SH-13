@@ -617,19 +617,22 @@ else if (fsmServer == 1)
          * Format: "O <idJoueur> <joueurCible> <objet>"
          ***************************************************************/
         case 'O':
-            sscanf(buffer, "%c %d %d %d", &com, &idJoueur, &joueur, &objet);
+            sscanf(buffer, "%c %d %d", &com, &idJoueur, &objet);
 
             if (idJoueur != joueurCourant)
                 break;
 
-            printf(">>> QUESTION O/N: Joueur %d demande symbole %d au joueur %d <<<\n",
-                   idJoueur, objet, joueur);
+            printf(">>> QUESTION O/N: Joueur %d demande symbole %d<<<\n",
+                   idJoueur, objet);
 
             // Réponse = 1 si le joueur ciblé possède le symbole
-            if (tableCartes[joueur][objet] > 0)
-                sprintf(reply, "R %d %d", objet, 1);
-            else
-                sprintf(reply, "R %d %d", objet, 0);
+            for (j = 0; j < 4; j++){
+                if (tableCartes[j][objet] > 0)
+                    sprintf(reply, "R %d %d %d", objet, j, 1);
+                else
+                    sprintf(reply, "R %d %d %d", objet, j, 0);
+                broadcastMessage(reply);
+            }
 
             broadcastMessage(reply);
 
@@ -641,23 +644,19 @@ else if (fsmServer == 1)
 
         /***************************************************************
          * COMMANDE 'S' : QUESTION STATISTIQUE
-         * Format: "S <idJoueur> <objet>"
+         * Format: "S <idJoueur> <joueur> <objet>"
          ***************************************************************/
         case 'S':
-            sscanf(buffer, "%c %d %d", &com, &idJoueur, &objet);
+            sscanf(buffer, "%c %d %d %d", &com, &idJoueur, &joueur, &objet);
 
             if (idJoueur != joueurCourant)
                 break;
 
-            printf(">>> QUESTION STAT: Joueur %d demande statistique %d <<<\n",
-                   idJoueur, objet);
-
-            int total = 0;
-            for (i = 0; i < 4; i++)
-                total += tableCartes[i][objet];
+            printf(">>> QUESTION STAT: Joueur %d demande statistique %d au %d <<<\n",
+                   idJoueur, objet, joueur);
 
             // Réponse uniquement au joueur demandeur
-            sprintf(reply, "S %d %d", objet, total);
+            sprintf(reply, "S %d %d", objet, tableCartes[joueur][objet]);
             sendMessageToClient(tcpClients[idJoueur].ipAddress,
                                 tcpClients[idJoueur].port,
                                 reply);
