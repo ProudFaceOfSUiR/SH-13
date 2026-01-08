@@ -191,6 +191,18 @@ int main(int argc, char ** argv)
 
 	winner_image = IMG_Load("winner_image.png");
 	loser_image = IMG_Load("loser_image.png");
+
+    SDL_Texture *texture_winner = NULL;
+    SDL_Texture *texture_loser = NULL;
+
+    if (winner_image != NULL) {
+        texture_winner = SDL_CreateTextureFromSurface(renderer, winner_image);
+        SDL_FreeSurface(winner_image);
+    }
+    if (loser_image != NULL) {
+        texture_loser = SDL_CreateTextureFromSurface(renderer, loser_image);
+        SDL_FreeSurface(loser_image);
+    }
 	strcpy(gNames[0],"-");
 	strcpy(gNames[1],"-");
 	strcpy(gNames[2],"-");
@@ -396,6 +408,8 @@ int main(int argc, char ** argv)
                     int j2;
                     sscanf(gbuffer,"F %d %d",&j1,&j2);
                     printf("Mauvaise accusation du joueur %d pour %d\n",j1,j2);
+                    if (j1==gId)
+                        gameOver = 1;
                     guiltGuess[j2]=1;
                 }
                 break;
@@ -404,46 +418,50 @@ int main(int argc, char ** argv)
                     int j1;
                     int j2;
                     sscanf(gbuffer,"F %d %d",&j1,&j2);
-                    if (j1==gId)
+                    if (j1==gId) {
                         printf(">>> VICTOIRE !!! Vous aviez raison, le coupable est %d <<<\n",j2);
-                    else
+                        winner = 1;
+                        }
+                    else {
+                        gameOver = 1;
                         printf(">>> DEFAITE !!! Le joueur %d avait raison, le coupable est %d <<<\n",j1,j2);
+                        }
                     guiltGuess[j2]=1;
                 }
                 break;
 
 
-			case 'W':
-                {
-                    int idWinner;
-                    char coupableName[256];
-                    sscanf(gbuffer,"W %d %s",&idWinner, coupableName);
-                    printf(">>> VICTOIRE du joueur %d (%s) - Coupable: %s <<<\n", 
-                           idWinner, gNames[idWinner], coupableName);
-                    
-                    gameOver = 1;
-                    if (idWinner == gId) {
-                        winner = 1;  // Ce joueur a gagné
-                        printf("VOUS AVEZ GAGNÉ!\n");
-                    } else {
-                        winner = 0;  // Ce joueur a perdu
-                        printf("Vous avez perdu...\n");
-                    }
-                }
-                break;
+			/* case 'W': */
+   /*              { */
+   /*                  int idWinner; */
+   /*                  char coupableName[256]; */
+   /*                  sscanf(gbuffer,"W %d %s",&idWinner, coupableName); */
+   /*                  printf(">>> VICTOIRE du joueur %d (%s) - Coupable: %s <<<\n",  */
+   /*                         idWinner, gNames[idWinner], coupableName); */
+   /*                   */
+   /*                  gameOver = 1; */
+   /*                  if (idWinner == gId) { */
+   /*                      winner = 1;  // Ce joueur a gagné */
+   /*                      printf("VOUS AVEZ GAGNÉ!\n"); */
+   /*                  } else { */
+   /*                      winner = 0;  // Ce joueur a perdu */
+   /*                      printf("Vous avez perdu...\n"); */
+   /*                  } */
+   /*              } */
+                /* break; */
                 
-            case 'F':
-                {
-                    int idLoser;
-                    char accusedName[256];
-                    sscanf(gbuffer,"F %d %s",&idLoser, accusedName);
-                    printf(">>> ÉCHEC du joueur %d (%s) - A accusé: %s <<<\n", 
-                           idLoser, gNames[idLoser], accusedName);
-                }
-                break;
-		}
-		synchro=0;
-        }
+            /* case 'F': */
+            /*     { */
+            /*         int idLoser; */
+            /*         char accusedName[256]; */
+            /*         sscanf(gbuffer,"F %d %s",&idLoser, accusedName); */
+            /*         printf(">>> ÉCHEC du joueur %d (%s) - A accusé: %s <<<\n",  */
+            /*                idLoser, gNames[idLoser], accusedName); */
+            /*     } */
+            /*     break; */
+		/* } */
+		/* synchro=0; */
+  /*       } */
 		}
 		synchro=0;
         }
