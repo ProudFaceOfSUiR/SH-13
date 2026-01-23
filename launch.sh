@@ -10,7 +10,6 @@ cleanup() {
     exit 0
 }
 
-# Catch Ctrl+C (SIGINT)
 trap cleanup SIGINT
 
 BASE_PORT=32001
@@ -23,6 +22,5 @@ for i in {1..4}; do
     PIDS+=($!)
 done
 
-# Wait forever until Ctrl+C
 wait
 

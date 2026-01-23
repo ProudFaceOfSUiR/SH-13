@@ -1,7 +1,5 @@
 #include <SDL2/SDL.h>        
 #include <SDL2/SDL_image.h>
-/* #include <SDL2/SDL_image.h> */
-/* #include <SDL2/SDL_i         */
 #include <SDL2/SDL_ttf.h>        
 #include <pthread.h>
 #include <stdio.h>
@@ -417,10 +415,11 @@ int main(int argc, char ** argv)
                 {
                     int j1;
                     int j2;
-                    sscanf(gbuffer,"F %d %d",&j1,&j2);
+                    sscanf(gbuffer,"W %d %d",&j1,&j2);
                     if (j1==gId) {
                         printf(">>> VICTOIRE !!! Vous aviez raison, le coupable est %d <<<\n",j2);
                         winner = 1;
+                        gameOver = 1;
                         }
                     else {
                         gameOver = 1;
